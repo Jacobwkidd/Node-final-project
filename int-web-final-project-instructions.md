@@ -11,7 +11,6 @@
 Create a folder named **node-final-project**. Do not put this folder inside the int-web-dev folder, we want to keep it separate so that it can have it's own separate Git repository.
 
 Add a **README.md** file to the project folder.
-
 Add a heading to the readme file that says **Intermediate Web Final Project**.
 
 Add a **.gitignore** file to the project folder and put this in it:
@@ -223,9 +222,9 @@ In the views folder, create a file named **default-layout.ejs** and put this cod
 		<script src="/js/main.js"></script>
 	</head>
 	<body>
-		<head>
+		<header>
 			<h1>Header</h1>
-		</head>
+		</header>
 		<nav>
 			Nav Bar
 		</nav>
@@ -354,7 +353,7 @@ Create a file in the **pages** folder named **contact.html** and put this code i
     <input type="submit" value="SUBMIT">   
 </form>
 ```
-Notice how the **action** attribute is set to **/contact-me/submit** on the form element.
+Notice how the **action** attribute is set to **/contact-me/submit** on the form element, we'll define a route for that in the next step.
 
 We'll put the routes for handling the contact pages into a separate file.
 Create a folder in the project folder named **routes**.
@@ -392,12 +391,15 @@ router.post('/submit', (req, res) => {
 // EXPORTS
 module.exports = router;
 ```
+Note that it is important to separate routes into different files as your site becomes more complex.
 
-Note that this route is configured to handle a POST request to /contact-me/submit.
+In order to plug the routes defined in contact.routes.js into **server.js**, add this code (to the ROUTES section):
+```js
+const contactRoutes = require("./routes/contact.routes.js")
+app.use('/contact-me', contactRoutes);
+```
 
-Also note that it is important to separate routes into different files as your site becomes more complex.
-
-Note that we aren't finished with the contact form page functionality, we'll finish it later.
+We aren't finished with the contact form page functionality, we'll finish it later.
 
 
 ## Converting Markdown Files into HTML
@@ -621,7 +623,7 @@ app.get("/blog/:post", (req, res) => {
       const html = md.render(obj.content);
       // pass the posts into the blog-list view
       res.render('default-layout', {
-         title: obj.title, // note how properties from the gray matter are passed into the EJS view
+         title: obj.data.title, // note how properties from the gray matter are passed into the EJS view
          content: html
       });
    }
