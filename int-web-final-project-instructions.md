@@ -417,7 +417,6 @@ title: "Title Here"
 description: "A nice description of this post"
 tags: ["sample"]
 ---
-
 # One hash tag for an H1 affect
 
 
@@ -633,6 +632,82 @@ Now try it out by navigating to this page in the browser: http://localhost:8080/
 
 Note that our web app will crash if you request a blog page that does not exist.
 We'll take care of that in the next step.
+
+## Improving the Blog List Page
+Right now the blog list page works, but it's limited because the template is receiving an array of strings (the link to each individual blog page). 
+
+We can improve it by passing in an array of objects, where each object includes not only the link, but the title and author as well.
+
+The first thing we'll do is write a function (in **functions.js**) that will process all the markdown files into an array of objects. Add this to functions.js:
+```js
+function getBlogList(){
+    const fs = require('fs');
+    const matter = require('gray-matter'); // converts md file (with gray matter) into an object
+    const md = require("markdown-it")({html:true}); // converts md to HTML
+    
+    // we'll populate this array in the loop below
+    const blogList = []; 
+
+    // get all the file names in the /blog folder
+    const pathToBlogFiles = __dirname + "/blog/";
+    const blogFiles = fs.readdirSync(pathToBlogFiles);
+    
+    // loop through the file names
+    blogFiles.forEach(fileName => {
+
+        if(fileName.endsWith(".md")){
+            // convert the file into a gray-matter object
+            const obj = matter.read(__dirname + '/blog/' + fileName);
+            // create an object that includes a link and some meta data about the file
+            const blogPostData = {
+                title: obj.data.title || "No Title",
+                author: obj.data.author || "No Author",
+                link: "/blog/" + fileName.replace(".md","")
+            }
+            // add the object to the blogList array
+            blogList.push(blogPostData)
+        }
+    })
+
+    return blogList;
+}
+```
+Now export the function at the bottom of functions.js by adding this line:
+```js
+exports.getBlogList = getBlogList;
+```
+
+Next we'll import the function into **server.js** by adding this line to the IMPORTS section:
+```js
+const getBlogList = require("./functions").getBlogList;
+```
+
+Now replace the code for the **/blog** route with this:
+```js
+const blogList = getBlogList();
+app.get("/blog", (req, res) => {
+   res.render('blog-list', {
+      title: "WTC Blog List",
+      posts: blogList
+   });
+});
+```
+Note that we could call **getBlogList()** inside the arrow function, but then it would be invoked every time the route is requested. Instead we call it outside of any route, which meand that it will be invoked once, when the server is started.
+
+Finally, update the **blog-list** template to treat the posts array as an array of objects:
+```md
+<%- include('partials/top') %>
+<main>
+   <ul>
+	<% for (let i = 0; i < posts.length; i++) { %>
+        <li>
+           <a href="<%= posts[i].link %>/"><%= posts[i].title %> by <%= posts[i].author %></a> 
+        </li>
+   <% } %>
+   </ul>
+</main>
+<%- include('partials/bottom') %>
+```
 
 ## 404 Page (Page Not Found)
 If a request is made for a URL that is not recognized by our web app, we should display a

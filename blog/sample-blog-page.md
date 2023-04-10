@@ -1,5 +1,6 @@
 ---
 title: "Title Here"
+author: "Jacob Kidd"
 description: "A nice description of this post"
 tags: ["sample"]
 ---

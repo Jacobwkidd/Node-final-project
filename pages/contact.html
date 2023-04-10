@@ -2,22 +2,22 @@
 <form method="POST" action="/contact-me/submit/">
     <label>First Name:</label>
     <br>
-    <input type="text" id="txtFirstName" name="firstName">
+    <input type="text" id="txtFirstName" name="firstName" required>
     <br>
 
     <label>Last Name:</label>
     <br>
-    <input type="text" id="txtLastName" name="lastName">
+    <input type="text" id="txtLastName" name="lastName" required>
     <br>
 
     <label>Email:</label>
     <br>
-    <input type="text" id="txtEmail" name="email">
+    <input type="email" id="txtEmail" name="email" required>
     <br>  
 
     <label>Comments:</label>
     <br>
-    <textarea id="txtComments" name="comments"></textarea>
+    <textarea id="txtComments" name="comments" required></textarea>
     <br>
     <input type="submit" value="SUBMIT">   
 </form>
