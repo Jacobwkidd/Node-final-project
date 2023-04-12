@@ -37,6 +37,20 @@ function getBlogList(){
     return blogList;
 }
 
+function getBlogPost(fileName){
+    const matter = require('gray-matter');
+    const pathToFile = __dirname + '/blog/' + fileName + '.md'
+   
+    const obj = matter.read(pathToFile);
+    if(obj){
+        const md = require("markdown-it")({html:true});// html:true allows you to put HTML tags in the markdown files
+        obj.html = md.render(obj.content);  
+    }
+    return obj;
+}
+
+
 
 exports.getFileContents = getFileContents;
 exports.getBlogList = getBlogList;
+exports.getBlogPost = getBlogPost; // exporting the name of it equals to the function

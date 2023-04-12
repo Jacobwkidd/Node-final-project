@@ -4,9 +4,12 @@ const matter = require('gray-matter');
 // the markdown code below the gray matter becomes the content property of the object.
 
 const obj = matter.read(__dirname + '/blog/sample-blog-page.md');
-console.log(obj);
+//console.log(obj);
 
 
 const md = require("markdown-it")({html:true});// html:true allows you to put HTML tags in the markdown files
 const html = md.render(obj.content);
-console.log(html);
+//console.log(html);
+
+const getBlogPost = require("./functions.js").getBlogPost;
+console.log(getBlogPost("sample-blog-page"));
