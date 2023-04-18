@@ -1,11 +1,15 @@
 <%- include('partials/top') %>
 <main>
-   <ul>
-	<% for (let i = 0; i < posts.length; i++) { %>
-        <li>
-           <a href="<%= posts[i].link %>/"><%= posts[i].title %> by <%= posts[i].author %></a> 
-        </li>
-   <% } %>
-   </ul>
+   <div class="card" style="width:18rem;">
+      <div class="card-body">
+         <ul class="list-group">
+         <% for (let i = 0; i < posts.length; i++) { %>
+            <li class="list-group-item">
+               <a href="<%= posts[i].link %>/"><%= posts[i].title %> by <%= posts[i].author %></a> 
+            </li>
+         <% } %>
+         </ul>
+      </div>
+    </div>
 </main>
 <%- include('partials/bottom') %>
